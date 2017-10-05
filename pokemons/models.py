@@ -8,9 +8,14 @@ import random
 
 class Trainer(AbstractUser):
     level = models.IntegerField(default=1)
+    cash = models.BigIntegerField(default=5)
 
     def __str__(self):
         return "lvl: {lvl} u:{u}".format(lvl=self.level, u=self.username)
+
+    def change_cash(self, cash_amount):
+        self.cash += cash_amount
+        self.save()
 
     class Meta:
         verbose_name = _('trainer')
