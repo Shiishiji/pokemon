@@ -48,59 +48,9 @@ class Region(models.Model):
         return self.name
 
 
-class Pokemon(models.Model):
-
-    I = "I"
-    II = "II"
-    III = "III"
-    IV = "IV"
-    V = "V"
-    X = "X"
-
-    DIFFICULTY_CHOICES = (
-        (I, "Very Easy"),
-        (II, "Easy"),
-        (III, "Difficult"),
-        (IV, "Tough"),
-        (V, "Hard"),
-        (X, "Impossible"),
-    )
-
-    number = models.CharField(max_length=4)
-    owner = models.ForeignKey(Trainer, default=None)
-    region = models.ForeignKey(Region)
-    types = models.ManyToManyField(Type)
-    catch_difficulty = models.CharField(max_length=1, choices=DIFFICULTY_CHOICES, default=X)
-
-    # Pokemon Attributes
-    level = models.IntegerField(default=1)
-    experience = models.BigIntegerField(default=0)
-
-    class Meta:
-        abstract = True
-
-    def catch(self, trainer=1, item=1):
-        difficulty = {
-            'I': 10,
-            'II': 8,
-            'III': 6,
-            'IV': 4,
-            'V': 2,
-            'X': 0
-        }
-        rate = difficulty[self.catch_difficulty] * 1 * item * trainer
-        result = random.randint(1, 100)
-        if result > rate:
-            return True
-        return False
-
-    def change_owner(self, new_owner):
-        self.owner = new_owner
-        self.save()
 
 
 class Statistics(models.Model):
-    pokemon = models.OneToOneField(Pokemon)
 
     # Pokemon trainings
     attack = models.IntegerField()
@@ -222,3 +172,57 @@ class Trainings(Statistics):
     def train_health(self, times=1):
         for i in range(times):
             self.up_health()
+
+
+class Pokemon(models.Model):
+
+    I = "I"
+    II = "II"
+    III = "III"
+    IV = "IV"
+    V = "V"
+    X = "X"
+
+    DIFFICULTY_CHOICES = (
+        (I, "Very Easy"),
+        (II, "Easy"),
+        (III, "Difficult"),
+        (IV, "Tough"),
+        (V, "Hard"),
+        (X, "Impossible"),
+    )
+
+    trainings = models.OneToOneField(Trainings)
+    attributes = models.OneToOneField(Attributes)
+
+    number = models.CharField(max_length=4)
+    owner = models.ForeignKey(Trainer, default=None)
+    region = models.ForeignKey(Region)
+    types = models.ManyToManyField(Type)
+    catch_difficulty = models.CharField(max_length=1, choices=DIFFICULTY_CHOICES, default=X)
+
+    # Pokemon Attributes
+    level = models.IntegerField(default=1)
+    experience = models.BigIntegerField(default=0)
+
+    class Meta:
+        abstract = True
+
+    def catch(self, trainer=1, item=1):
+        difficulty = {
+            'I': 10,
+            'II': 8,
+            'III': 6,
+            'IV': 4,
+            'V': 2,
+            'X': 0
+        }
+        rate = difficulty[self.catch_difficulty] * 1 * item * trainer
+        result = random.randint(1, 100)
+        if result > rate:
+            return True
+        return False
+
+    def change_owner(self, new_owner):
+        self.owner = new_owner
+        self.save()
