@@ -22,15 +22,20 @@ class Trainer(AbstractUser):
         verbose_name_plural = _('trainers')
 
 
+class Item(models.Model):
+    pass
+
+
 class Type(models.Model):
     name = models.CharField(max_length=25)
 
-    effective = 2  # super efektywnosc
-    resistant = 0.5  # odpornosc
-    not_effective = 0.5  # mala efektywnosc
-    vulnerability = 2  # podatnosc
-    immune = 0  # nietykalnosc
-    no_effect = 0  # brak efektu
+    # FOR LATER WHEN DOING FIGHTING SYSTEM
+    # effective = 2  # super efektywnosc
+    # resistant = 0.5  # odpornosc
+    # not_effective = 0.5  # mala efektywnosc
+    # vulnerability = 2  # podatnosc
+    # immune = 0  # nietykalnosc
+    # no_effect = 0  # brak efektu
 
     def __str__(self):
         return self.name
