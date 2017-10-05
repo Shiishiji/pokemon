@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.utils.translation import ugettext_lazy as _
 import random
 
 # Create your models here.
@@ -10,6 +11,10 @@ class Trainer(AbstractUser):
 
     def __str__(self):
         return "lvl: {lvl} u:{u}".format(lvl=self.level, u=self.username)
+
+    class Meta:
+        verbose_name = _('trainer')
+        verbose_name_plural = _('trainers')
 
 
 class Type(models.Model):
@@ -78,6 +83,10 @@ class Pokemon(models.Model):
         if result > rate:
             return True
         return False
+
+    def change_owner(self, new_owner):
+        self.owner = new_owner
+        self.save()
 
 
 class Statistics(models.Model):
